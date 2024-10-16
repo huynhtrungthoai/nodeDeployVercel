@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "sourceMap": true,
+        "outDir": "dist",
+        "target": "ESNext",
+        "module": "CommonJS",
+        "lib": ["esnext"],
+        "esModuleInterop": true
+    },
+    "exclude": ["node_modules"],
+    "strict": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "include": ["."],
+    "outDir": "./build",
+    "rootDir": "."
+}
