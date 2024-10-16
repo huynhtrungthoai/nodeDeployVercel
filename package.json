@@ -1,7 +1,7 @@
 {
     "scripts": {
         "start": "node index.ts",
-        "build": "npx tsc --outDir build/"
+        "build": "npx tsc --outDir public/"
     },
     "dependencies": {
         "express": "^4.21.1"
