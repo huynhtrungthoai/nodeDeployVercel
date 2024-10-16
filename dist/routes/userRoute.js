@@ -22,27 +22,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-require("reflect-metadata");
-const express_1 = __importDefault(require("express"));
-const bodyParser = __importStar(require("body-parser"));
-const userRoute_1 = __importDefault(require("./routes/userRoute"));
-const authRoute_1 = __importDefault(require("./routes/authRoute"));
-const db_1 = require("./db");
-const app = (0, express_1.default)();
-app.use(bodyParser.json());
-app.use(userRoute_1.default);
-app.use(authRoute_1.default);
-db_1.AppDataSource.connect()
-    .then(() => {
-    app.listen(process.env.PORT || 3000, () => {
-        console.log(`Server is running on ${process.env.NODE_ENV}  port ${process.env.PORT || 3000}`);
-    });
-})
-    .catch((err) => {
-    console.error(err.message);
-});
-//# sourceMappingURL=index.js.map
+const express_1 = require("express");
+const UserController = __importStar(require("../controllers/userController"));
+const deserializeUser_1 = require("../middleware/deserializeUser");
+const requireUser_1 = require("../middleware/requireUser");
+const router = (0, express_1.Router)();
+const ROUTE_PREFIX = 'api';
+router.get('/', UserController.getHome);
+router.get(`/${ROUTE_PREFIX}/users`, UserController.getUsers);
+router.get(`/${ROUTE_PREFIX}/me`, deserializeUser_1.deserializeUser, requireUser_1.requireUser, UserController.getMeHandler);
+exports.default = router;
+//# sourceMappingURL=userRoute.js.map

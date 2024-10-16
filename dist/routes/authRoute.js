@@ -22,27 +22,21 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-require("reflect-metadata");
-const express_1 = __importDefault(require("express"));
-const bodyParser = __importStar(require("body-parser"));
-const userRoute_1 = __importDefault(require("./routes/userRoute"));
-const authRoute_1 = __importDefault(require("./routes/authRoute"));
-const db_1 = require("./db");
-const app = (0, express_1.default)();
-app.use(bodyParser.json());
-app.use(userRoute_1.default);
-app.use(authRoute_1.default);
-db_1.AppDataSource.connect()
-    .then(() => {
-    app.listen(process.env.PORT || 3000, () => {
-        console.log(`Server is running on ${process.env.NODE_ENV}  port ${process.env.PORT || 3000}`);
-    });
-})
-    .catch((err) => {
-    console.error(err.message);
-});
-//# sourceMappingURL=index.js.map
+const express_1 = require("express");
+const requireUser_1 = require("../middleware/requireUser");
+const validate_1 = require("../middleware/validate");
+const user_schema_1 = require("../schemas/user.schema");
+const AuthController = __importStar(require("../controllers/authController"));
+const router = (0, express_1.Router)();
+const ROUTE_PREFIX = 'api';
+// Register user
+router.post(`/${ROUTE_PREFIX}/register`, (0, validate_1.validate)(user_schema_1.createUserSchema), AuthController.registerHandler);
+// Login user
+router.post(`/${ROUTE_PREFIX}/login`, (0, validate_1.validate)(user_schema_1.loginUserSchema), AuthController.loginHandler);
+// Logout user
+router.get(`/${ROUTE_PREFIX}/logout`, requireUser_1.requireUser, AuthController.logoutHandler);
+// Refresh access token
+// router.get(`/${ROUTE_PREFIX}/refresh`, refreshAccessTokenHandler);
+exports.default = router;
+//# sourceMappingURL=authRoute.js.map
